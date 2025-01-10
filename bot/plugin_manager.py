@@ -4,6 +4,7 @@ from plugins.gtts_text_to_speech import GTTSTextToSpeech
 from plugins.auto_tts import AutoTextToSpeech
 from plugins.dice import DicePlugin
 from plugins.youtube_audio_extractor import YouTubeAudioExtractorPlugin
+from plugins.youtube_summary import YouTubeSummaryPlugin
 from plugins.ddg_image_search import DDGImageSearchPlugin
 from plugins.spotify import SpotifyPlugin
 from plugins.crypto import CryptoPlugin
@@ -33,6 +34,7 @@ class PluginManager:
             'spotify': SpotifyPlugin,
             'worldtimeapi': WorldTimeApiPlugin,
             'youtube_audio_extractor': YouTubeAudioExtractorPlugin,
+            'youtube_summary': YouTubeSummaryPlugin,
             'dice': DicePlugin,
             'deepl_translate': DeeplTranslatePlugin,
             'gtts_text_to_speech': GTTSTextToSpeech,
