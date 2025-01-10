@@ -16,11 +16,8 @@ from youtube_transcript_api._errors import (
 )
 from pytube.innertube import _default_clients
 
+# bypass youtube restrictions
 _default_clients["ANDROID"]["context"]["client"]["clientVersion"] = "19.08.35"
-_default_clients["IOS"]["context"]["client"]["clientVersion"] = "19.08.35"
-_default_clients["ANDROID_EMBED"]["context"]["client"]["clientVersion"] = "19.08.35"
-_default_clients["IOS_EMBED"]["context"]["client"]["clientVersion"] = "19.08.35"
-_default_clients["IOS_MUSIC"]["context"]["client"]["clientVersion"] = "6.41"
 _default_clients["ANDROID_MUSIC"] = _default_clients["ANDROID"]
 
 class YouTubeSummaryPlugin(Plugin):
@@ -28,17 +25,17 @@ class YouTubeSummaryPlugin(Plugin):
     A plugin to make a summary from a YouTube video
     """
 
-    languages = [
-        "zh",  # Китайский (мандаринский диалект) — около 1,3 млрд носителей
-        "es",  # Испанский — около 460 млн носителей
-        "en",  # Английский — около 380 млн носителей
-        "hi",  # Хинди — около 340 млн носителей
-        "ar",  # Арабский — около 320 млн носителей
-        "bn",  # Бенгальский — около 230 млн носителей
-        "pt",  # Португальский — около 220 млн носителей
-        "ru",  # Русский — около 155 млн носителей
-        "ja",  # Японский — около 130 млн носителей
-        "pa"  # Лахнда (Западный панджаби) — около 120 млн носителей
+    top_languages = [
+        "zh",  # Chinese (Mandarin) — about 1.3 billion speakers
+        "es",  # Spanish — about 460 million speakers
+        "en",  # English — about 380 million speakers
+        "hi",  # Hindi — about 340 million speakers
+        "ar",  # Arabic — about 320 million speakers
+        "bn",  # Bengali — about 230 million speakers
+        "pt",  # Portuguese — about 220 million speakers
+        "ru",  # Russian — about 155 million speakers
+        "ja",  # Japanese — about 130 million speakers
+        "pa"  # Lahnda (Western Punjabi) — about 120 million speakers
     ]
 
     def get_source_name(self) -> str:
@@ -52,7 +49,7 @@ class YouTubeSummaryPlugin(Plugin):
                 "type": "object",
                 "properties": {
                     "youtube_link": {"type": "string", "description": "YouTube video link to make a summary from"},
-                    "target_language": {"type": "string", "description": "Transcript language in ISO 639-1"}
+                    "target_language": {"type": "string", "description": "Target transcript language (ISO 639-1)"}
                 },
                 "required": ["youtube_link", "target_language"]
             },
@@ -76,7 +73,7 @@ class YouTubeSummaryPlugin(Plugin):
             except VideoUnavailable:
                 return {'result': 'Video unavailable'}
             try:
-                transcript_find = transcript_list.find_transcript(self.languages)
+                transcript_find = transcript_list.find_transcript(self.top_languages)
             except NoTranscriptFound:
                 return {'result': 'No transcript found'}
             try:
@@ -91,19 +88,3 @@ class YouTubeSummaryPlugin(Plugin):
         except Exception as e:
             logging.warning(f'Failed to make a summary from YouTube video: {str(e)}')
             return {'result': 'Failed to make a summary audio'}
-
-
-# transcript = transcript_list.find_generated_transcript(['en'])
-# transcript = transcript.fetch()
-# combined_text = " ".join(segment['text'] for segment in transcript)
-#
-# buffer = io.StringIO()
-# buffer.write(combined_text)
-# buffer.seek(0)
-# file_content = buffer.getvalue()
-# buffer.close()
-#
-# return {
-#     'summary_content': file_content,
-#     'target_language': kwargs['target_language']
-# }
